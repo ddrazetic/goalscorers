@@ -1,0 +1,622 @@
+
+<!DOCTYPE html>
+<head>
+   <meta charset="utf-8">
+   <link rel="stylesheet" href="styles.css">
+   <script src="https://d3js.org/d3.v5.min.js"></script>
+   
+   
+   
+   <style>
+
+  
+   </style>
+</head>
+
+<body>
+   <header>
+      <div class="boots"><img src="images/boots.png"></div>
+      <div class="heading"><h1>Top 8 football goalscorers in Europe still playing</h1></div> 
+      <div class="ball"><img src="images/ball1.png"></div>
+   </header>
+
+  
+
+   <div class="players">
+
+<div class="players2">
+      <div class="player1">
+         <img src="images/player1.jpg">
+         <p>1. CRISTIANO RONALDO</p>
+         <div class="chart" id="chart0"></div>
+      </div>
+      <div class="player1">
+         <img src="images/player2.jpg">
+         <p>2. LIONEL MESSI</p>
+         <div class="chart" id="chart1"></div> 
+      </div>
+   </div>
+<div class="players2">
+      <div class="player1">
+         <img src="images/player3.jpg">
+         <p>3. ZLATAN IBRAHIMOVIĆ</p>
+         <div class="chart" id="chart2"></div>
+      </div>
+      <div class="player1">
+         <img src="images/player4.jpg">
+         <p>4. LUIS SUAREZ</p>
+         <div class="chart" id="chart3"></div>
+      </div>
+   </div>  
+   </div>
+
+   <div class="players">
+      <div class="players2">
+                  <div class="player1">
+                     <img src="images/player5.jpg">
+                     <p>5. ROBERT LEWANDOWSKI</p>
+                     <div class="chart" id="chart4"></div>
+                  </div>
+                  <div class="player1">
+                     <img src="images/player6.jpg">
+                     <p>6. EDISON CAVANI</p>
+                     <div class="chart" id="chart5"></div>
+                  </div>
+               </div>
+
+
+               <div class="players2">
+                  <div class="player1">
+                     <img src="images/player7.jpg">
+                     <p>7. SERGIO AGUERO</p>
+                     <div class="chart" id="chart6"></div>
+                  </div>
+                  <div class="player1">
+                     <img src="images/player8.jpg">
+                     <p>8. KLASS-JAN HUNTELAAR</p>
+                     <div class="chart" id="chart7"></div>
+                  </div>
+               </div>
+
+      
+      
+   </div>
+
+   <div class="barchart" id="barchart"></div>
+   
+
+   <script>
+
+
+const top_n = 11;
+const height = 720;
+//const width = 1280;
+const width = window.innerWidth - 300;
+
+/*
+function resize(){
+    // do all your stuff here
+    width = window.innerWidth - 600;
+    
+    const svg = d3.select("body").append("svg")
+   .attr("width", width)
+   .attr("height", height);
+
+}
+
+*/
+
+ //1280
+
+const tickDuration  = 1200; //delay of an animation 1000
+const delayDuration = 1200; //delay between two years 1500
+
+const yearStart     = 2001;
+const yearEnd       = 2020;
+
+const title = `Goals for club in all competitions (${yearStart}-${yearEnd})`;
+const subTitle = "(until May 11, 2021)";
+
+    
+const svg = d3.select("#barchart").append("svg")
+   .attr("width", width)
+   .attr("height", height);
+
+
+
+   
+
+const margin = {
+   top: 120,
+   right: 50,
+   bottom: 5,
+   left: 0
+};
+
+const barPadding = (height-(margin.bottom+margin.top))/(top_n*5);
+
+svg.append('text')
+   .attr('class', 'title')
+   .attr('y', 24)
+   .html(title);
+
+svg.append("text")
+   .attr("class", "subTitle")
+   .attr("y", 55)
+   .html( subTitle );
+
+svg.append('text')
+   .attr('class', 'caption')
+   .attr('x', width)
+   .attr('y', height-5)
+   .style('text-anchor', 'end');
+ 
+
+let year = yearStart;
+
+d3.csv("data/goalscores.csv")
+.then(function( data ) {
+
+   console.log(data);
+
+   data.forEach( d => {
+      d.colour = d3.hsl(Math.random()*360,0.75,0.75);
+   });
+
+   let lastValues = {};
+  
+
+   function _normalizeData(){
+       const values = {};
+       
+
+       const ret = [];
+       data.forEach( d => {
+          const name = d["Player Name"];
+          const lbl  = `${year} [YR${year}]`;
+          const txt  = d[lbl];
+          let val  = 0;
+          if( txt != '..')
+            val = parseInt(txt);
+          
+
+          let lastValue = lastValues[ name ];
+
+          
+          if( lastValue == null )
+            lastValue = 0;
+
+          
+          ret.push({
+              name     : name,
+              colour   : d.colour,
+              value    : val,
+              lastValue: lastValue
+          });
+          
+          //remember current value of the country
+          values[name] = val;
+       });
+       
+       lastValues = values;
+
+       return ret.sort((a,b) => b.value - a.value).slice(0, top_n);
+   }
+
+
+   let yearSlice = _normalizeData();
+
+   yearSlice.forEach((d,i) => d.rank = i);
+
+   console.log('yearSlice: ', yearSlice)
+
+   let x = d3.scaleLinear()
+      .domain([0, d3.max(yearSlice, d => d.value)])
+      .range([margin.left, width-margin.right-65]);
+
+   let y = d3.scaleLinear()
+      .domain([top_n, 0])
+      .range([height-margin.bottom, margin.top]);
+
+   let xAxis = d3.axisTop()
+      .scale(x)
+      .ticks(width > 500 ? 5:2)
+      .tickSize(-(height-margin.top-margin.bottom))
+      .tickFormat(d => d3.format(',')(d));
+
+   svg.append('g')
+      .attr('class', 'axis xAxis')
+      .attr('transform', `translate(0, ${margin.top})`)
+      .call(xAxis)
+      .selectAll('.tick line')
+      .classed('origin', d => d == 0);
+
+   svg.selectAll('rect.bar')
+      .data(yearSlice, d => d.name)
+      .enter()
+      .append('rect')
+      .attr('class', 'bar')
+      .attr('x', x(0)+1)
+      .attr('width', d => x(d.lastValue)-x(0))
+      .attr('y', d => y(d.rank)+5)
+      .attr('height', y(1)-y(0)-barPadding)
+      .style('fill', d => d.colour);
+
+   svg.selectAll('text.label')
+      .data(yearSlice, d => d.name)
+      .enter()
+      .append('text')
+      .attr('class', 'label')
+      .attr('x', d => x(d.lastValue)-8)
+      .attr('y', d => y(d.rank)+5+((y(1)-y(0))/2)+1)
+      .style('text-anchor', 'end')
+      .html(d => d.name);
+
+   svg.selectAll('text.valueLabel')
+      .data(yearSlice, d => d.name)
+      .enter()
+      .append('text')
+      .attr('class', 'valueLabel')
+      .attr('x', d => x(d.lastValue)+5)
+      .attr('y', d => y(d.rank)+5+((y(1)-y(0))/2)+1)
+      .text(d => d.lastValue);
+
+   let yearText = svg.append('text')
+      .attr('class', 'yearText')
+      .attr('x', width-margin.right)
+      .attr('y', height-25)
+      .style('text-anchor', 'end')
+      .html(~~year);
+
+   let ticker = d3.interval(e => {
+
+      yearSlice = _normalizeData();
+
+      yearSlice.forEach((d,i) => d.rank = i);
+
+      
+
+      x.domain([0, d3.max(yearSlice, d => d.value)]); 
+
+      svg.select('.xAxis')
+         .transition()
+         .duration(tickDuration)
+         .ease(d3.easeLinear)
+         .call(xAxis);
+
+      const bars = svg.selectAll('.bar').data(yearSlice, d => d.name);
+
+      bars
+         .enter()
+         .append('rect')
+         .attr('class', d => `bar ${d.name.replace(/\s/g,'_')}`)
+         .attr('x', x(0)+1)
+         .attr( 'width', d => x(d.value)-x(0))
+         .attr('y', d => y(top_n+1)+5)
+         .attr('height', y(1)-y(0)-barPadding)
+         .style('fill', d => d.colour)
+         .transition()
+         .duration(tickDuration)
+         .ease(d3.easeLinear)
+         .attr('y', d => y(d.rank)+5);
+
+      bars
+         .transition()
+         .duration(tickDuration)
+         .ease(d3.easeLinear)
+         .attr('width', d => Math.max(0, x(d.value)-x(0)))
+         .attr('y', d => y(d.rank)+5);
+
+      bars
+         .exit()
+         .transition()
+         .duration(tickDuration)
+         .ease(d3.easeLinear)
+         .attr('width', d => Math.max(0, x(d.value)-x(0)))
+         .attr('y', d => y(top_n+1)+5)
+         .remove();
+
+      const labels = svg.selectAll('.label')
+         .data(yearSlice, d => d.name);
+
+      labels
+         .enter()
+         .append('text')
+         .attr('class', 'label')
+         .attr('x', d => x(d.value)-8)
+         .attr('y', d => y(top_n+1)+5+((y(1)-y(0))/2))
+         .style('text-anchor', 'end')
+         .html(d => d.name)    
+         .transition()
+         .duration(tickDuration)
+         .ease(d3.easeLinear)
+         .attr('y', d => y(d.rank)+5+((y(1)-y(0))/2)+1);
+
+
+      labels
+         .transition()
+         .duration(tickDuration)
+         .ease(d3.easeLinear)
+         .attr('x', d => x(d.value)-8)
+         .attr('y', d => y(d.rank)+5+((y(1)-y(0))/2)+1);
+
+      labels
+         .exit()
+         .transition()
+         .duration(tickDuration)
+         .ease(d3.easeLinear)
+         .attr('x', d => x(d.value)-8)
+         .attr('y', d => y(top_n+1)+5)
+         .remove();
+
+
+
+      const valueLabels = svg.selectAll('.valueLabel').data(yearSlice, d => d.name);
+
+      valueLabels
+         .enter()
+         .append('text')
+         .attr('class', 'valueLabel')
+         .attr('x', d => x(d.value)+5)
+         .attr('y', d => y(top_n+1)+5)
+         .text(d => d.value)
+         .transition()
+         .duration(tickDuration)
+         .ease(d3.easeLinear)
+         .attr('y', d => y(d.rank)+5+((y(1)-y(0))/2)+1);
+
+      valueLabels
+         .transition()
+         .duration(tickDuration)
+         .ease(d3.easeLinear)
+         .attr('x', d => x(d.value)+5)
+         .attr('y', d => y(d.rank)+5+((y(1)-y(0))/2)+1)
+         .tween("text", function(d) {
+            const i = d3.interpolateNumber(d.lastValue, d.value);
+            //return i(interpolator);
+            return function(t) {
+               let v = i(t);
+               if( v < 0 )
+                   v = 0;
+               this.textContent = v.toFixed(0) + " goals";
+            };
+         });
+
+
+      valueLabels
+         .exit()
+         .transition()
+         .duration(tickDuration)
+         .ease(d3.easeLinear)
+         .attr('x', d => x(d.value)+5)
+         .attr('y', d => y(top_n+1)+5)
+         .remove();
+
+      yearText.html(~~year);
+
+      year ++;
+      if(year > yearEnd) ticker.stop();
+   }, delayDuration);
+
+});
+
+
+
+//PIE CHART---------------------------------
+ 
+var keyMap = [{
+  category: 'name1',
+  value: 'value1'
+}, {
+  category: 'name2',
+  value: 'value2'
+}, {
+  category: 'name3',
+  value: 'value3'
+}, {
+  category: 'name4',
+  value: 'value4'
+}, {
+  category: 'name5',
+  value: 'value5'
+}, {
+  category: 'name6',
+  value: 'value6'
+}, {
+  category: 'name7',
+  value: 'value7'
+}, {
+  category: 'name8',
+  value: 'value8'
+}
+];
+
+
+var dataa = [
+  
+
+  
+  {name1: "ASSISTS", value1: 147},
+  {name1: "GOALS", value1: 477},
+
+  
+  {name2: "ASSISTS", value2: 193},
+  {name2: "GOALS", value2: 472},
+
+  
+  {name3: "ASSISTS", value3: 134},
+  {name3: "GOALS", value3: 383},
+
+ 
+  {name4: "ASSISTS", value4: 140},
+  {name4: "GOALS", value4: 325},
+
+  
+  {name5: "ASSISTS", value5: 60},
+  {name5: "GOALS", value5: 307},
+
+  
+  {name6: "ASSISTS", value6: 41},
+  {name6: "GOALS", value6: 259},
+
+  
+  {name7: "ASSISTS", value7: 73},
+  {name7: "GOALS", value7: 257},
+
+  
+  {name8: "ASSISTS", value8: 52},
+  {name8: "GOALS", value8: 254},
+
+];
+
+var text = "";
+
+var width1 = 260;
+var height1 = 260;
+var thickness = 50;
+var duration = 750;
+
+var radius = Math.min(width1, height1) / 2;
+
+var formattedData = d3.nest()
+.key(function(d) { return Object.keys(d)[0]; })
+.entries(dataa).map(function(d){ return d.values });
+
+
+
+
+
+formattedData.forEach(function(pieData, i) {
+
+
+      var color = d3.scaleOrdinal([`#00FFFF`, `#04B3B3`]);
+    
+
+      var svg1 = d3.select("#chart"+i)
+      .append('svg')
+      .attr('class', 'pie')
+      .attr('width', width1)
+      .attr('height', height1);
+
+
+
+      var g1 = svg1.append('g')
+      .attr('transform', 'translate(' + (width1/2) + ',' + (height1/2) + ')');
+
+      var arc = d3.arc()
+      .innerRadius(radius - thickness)
+      .outerRadius(radius);
+   
+      var arc1 = d3.arc()
+      .innerRadius(radius - thickness -79)
+      .outerRadius(radius);
+      
+
+
+      var pie = d3.pie()
+      .sort(null)
+      .value(function(d) {
+         console.log(keyMap[i].value, d);
+         return d[keyMap[i].value];
+      });
+
+
+
+      var path = g1.selectAll('path')
+      .data(pie(pieData))
+      .enter()
+      .append("g")
+      
+
+      
+      
+      .on("mouseover", function(d) {
+            let g = d3.select(this)
+            
+            .style("cursor", "pointer")
+            
+            .style("fill", "black")
+            .append("g")
+            .attr("class", "text-group");
+      
+            g.append("text")
+            .attr("class", "name-text")
+            .text(function(d) {    
+      return d.data[keyMap[i].category];
+    })
+            .attr('text-anchor', 'middle')
+            .attr('dy', '-1.2em');
+      
+            g.append("text")
+            .attr("class", "value-text")
+            .text(function(d) {    
+      return d.data[keyMap[i].value];
+    })
+            .attr('text-anchor', 'middle')
+            .attr('dy', '.6em');
+         })
+      .on("mouseout", function(d) {
+            d3.select(this)
+            .style("cursor", "none")         
+            .style("fill", color(this._current))
+            .select(".text-group").remove();
+            
+            
+            /*d3.select(this)
+            .append("text")
+            .text("HELLO");
+*/
+
+              
+         })
+      .append('path')
+     
+      .attr('d', arc1)
+      .style("fill-opacity", 0)
+      .attr('fill', (d,i) => color(i))
+      
+
+      .on("mouseover", function(d) {
+            d3.select(this)     
+            .style("cursor", "pointer")
+            .style("fill", "black");
+         })
+      .on("mouseout", function(d) {
+            d3.select(this)
+            .style("cursor", "none")  
+            .style("fill", color(this._current));
+         })
+      .each(function(d, i) { this._current = i; });
+
+      function type(d) {
+    d[keyMap[i].value] = +d[keyMap[i].value];
+    return d;
+  }
+      g1.append('text')
+      .attr('text-anchor', 'middle')
+      .attr('dy', '.35em')
+      .text(text);
+
+      g1.selectAll('path')
+      .transition()
+	    .delay(1000)
+	    .duration(4000)
+       .attr('d', arc)
+       .style("fill-opacity", 1);
+
+});
+
+
+
+
+/*
+$(document).ready(function(){
+    resize();
+    $(window).resize(resize);
+});
+*/
+   </script>
+
+
+</body>
+
