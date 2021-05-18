@@ -49,6 +49,7 @@ header{
 
  .players {
      margin-top: 30px;
+     margin-left: 30px;
     border-style: solid;
     border-color: white;
     border-width: 0px 0px 0px 0px;
@@ -60,6 +61,7 @@ header{
  }
 
 .players2{
+  
   display: flex;
   flex-grow: 1; 
 }
@@ -106,10 +108,20 @@ border-color: white;
   
 }
 
+.repeat:hover {
+  opacity: 0.7;
+}
+
+.start :hover {
+  opacity: 0.5;
+}
+
+
 .yearGo{
   height: 25px;
+text-align: center;
   font-weight: bold;
-  text-align: center;
+ 
 }
 
 .start img {
@@ -137,7 +149,91 @@ border-color: white;
 
 .barchart{
   display: flex;
+  flex-direction: column;
 }
+
+
+.slidecontainer {
+  display: flex;
+  flex-direction: column;
+  margin-left: 100px;
+  /* Width of the outside container */
+}
+
+
+/* The slider itself */
+.slider {
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 100%; /* Full-width */
+  height: 25px; /* Specified height */
+  background: #d3d3d3; /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
+}
+
+/* Mouse-over effects */
+.slider:hover {
+  opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+  
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #04AA6D; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #04AA6D; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+
+.slidecontainer datalist {
+  margin-top: 5px;
+  
+  margin-right: 10px;
+	position:relative;
+	display: flex;
+	justify-content: space-between;
+	height: auto;
+	bottom: 16px;
+	/* disable text selection */
+	-webkit-user-select: none; /* Safari */        
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+/Edge */                
+	user-select: none; /* Standard */
+	/* disable click events */
+	pointer-events:none;  
+}
+.slidecontainer datalist option {
+  
+  color:gray;
+  font-weight: bold;
+	width: 10px;
+	height: 10px;
+  
+	min-height: 10px;
+	border-radius: 100px;
+	/* hide text */
+	white-space: nowrap;       
+  padding:0;
+  line-height: 40px;
+}
+
+
+
+
+
 
 
 /* PIE CHART --------------------------*/
@@ -223,7 +319,7 @@ path.domain{
   display: none;
 }
 
-@media screen and (max-width: 1550px) {
+@media screen and (max-width: 1645px) {
   .players {
     flex-direction: column;
     margin-top: 0px;

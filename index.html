@@ -81,24 +81,63 @@
       
       
    </div>
-
-   <div class="display">
+  
    
-      <div class="barchart" id="barchart"></div>
+  
+   <div class="display">
+      <div class="barSlider">
+   
+            <div class="barchart" id="barchart"></div>
+
+            <div class="slidecontainer">
+               <input oninput="rangeFunction()" type="range" min="2000" max="2020" value="2001" list="ticks1" step="1" class="slider" id="myRange">
+               <datalist id="ticks1">
+                  <option value="2000">'00</option>
+                  <option value="2001">'01</option>
+                  <option value="2002">'02</option>
+                  <option value="2003">'03</option>
+                  <option value="2004">'04</option> 
+                  <option value="2005">'05</option>   
+                  <option value="2006">'06</option>
+                  <option value="2007">'07</option>
+                  <option value="2008">'08</option>
+                  <option value="2009">'09</option> 
+                  <option value="2010">'10</option>  
+                  <option value="2011">'11</option>
+                  <option value="2012">'12</option>
+                  <option value="2013">'13</option>
+                  <option value="2014">'14</option> 
+                  <option value="2015">'15</option>   
+                  <option value="2016">'16</option>
+                  <option value="2017">'17</option>
+                  <option value="2018">'18</option>
+                  <option value="2019">'19</option> 
+                  <option value="2020">'20</option>      
+                </datalist>
+               <label id="result"></label> 
+            </div>
+         </div>      
 
       <div class="buttons">
          <button class="repeat" id="repeate" onclick="repeate()"><img src="images/redo.png"></button>
          <button class="start" id="start" onclick="startStop()"><img src="images/play.png"></button>
-         <input type="number" class="yearGo" min="2001" max="2020" id="yearGo" name="yearGo">
+         <input type="number" class="yearGo" placeholder="year" min="2000" max="2020" id="yearGo" name="yearGo">
          <button class="repeat" id="goTo" onclick="goTo()"><img src="images/arrow.png"></button>
+      </div>
    </div>
+<!-- Write your comments here 
+   <div class="slidecontainer">
+      <input oninput="rangeFunction()" type="range" min="2001" max="2020" value="2001" step="1" class="slider" id="myRange">
+      <label id="result"></label> 
    </div>
+-->
 
    <script>
 
 let startNmb=1;
 let repeateNmb=0;
 let changeYear=0;
+let rangeNmb=0;
 
 
 const top_n = 11;
@@ -121,8 +160,8 @@ function resize(){
 
  //1280
 
-const tickDuration  = 800; //delay of an animation 1000
-const delayDuration = 1000; //delay between two years 1500
+const tickDuration  = 1000; //delay of an animation 1000
+const delayDuration = 1200; //delay between two years 1500
 
 const yearStart     = 2001;
 const yearEnd       = 2020;
@@ -415,7 +454,7 @@ d3.csv("data/goalscores.csv")
 
       
       if(repeateNmb==1){
-         year=2000;
+         year=1999;
          repeateNmb=0;
          startNmb=1;
       }
@@ -425,7 +464,15 @@ d3.csv("data/goalscores.csv")
      if(startNmb==1 && year<yearEnd){
          year++;
          document.getElementById("start").style.backgroundColor = "green";
+         
+
       }
+
+      
+
+
+
+
 
       if(changeYear==1)
       {
@@ -434,13 +481,34 @@ d3.csv("data/goalscores.csv")
         // startNmb=1;
          
       }
-   
+
+      if(rangeNmb==1){
+         year=document.getElementById("myRange").value;
+         rangeNmb=0;
+      }
+
+
+
+
+
+      
+      prev.style.color="gray";
+      opSelected = doc.querySelector(`[value="${year}"]`);
+      opSelected.style.color ="red";
+      prev= opSelected;
+
+
+      
+
+      document.getElementById('myRange').value=year;
+
       //year ++;
 
       //if(year > yearEnd) ticker.stop();
    }, delayDuration);
 
 });
+
 
 function repeate() {
    console.log("repeate");
@@ -462,10 +530,33 @@ function startStop() {
 function goTo(){
    let inputVal = document.getElementById("yearGo").value;
    console.log(inputVal);
+   
+
    changeYear=1;
 
 }
 
+var prev=document.getElementById("ticks1").querySelector(`[value="${document.getElementById("myRange").value}"]`);
+var x , opSelected;
+var doc= document.getElementById("ticks1");
+
+
+
+function rangeFunction() {
+
+  prev.style.color="gray";
+   
+    x = document.getElementById("myRange").value;
+    opSelected = doc.querySelector(`[value="${x}"]`);
+   opSelected.style.color ="red";
+
+   prev= opSelected;
+
+
+   rangeNmb=1;
+  //  var x = document.getElementById("myRange").value; //get current range value
+   // document.getElementById("result").innerHTML = x; // display current range value in #result
+}
 
 //PIE CHART---------------------------------
  
