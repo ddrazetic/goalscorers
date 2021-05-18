@@ -81,11 +81,21 @@
       
       
    </div>
-
+   <div class="buttons">
+         <button class="repeat" id="repeate" onclick="repeate()"><img src="images/redo.png"></button>
+         <button class="start" id="start" onclick="startStop()"><img src="images/play.png"></button>
+         <input type="number" min="2001" max="2020" id="yearGo" name="yearGo">
+         <button class="repeat" id="goTo" onclick="goTo()"><img src="images/arrow.png"></button>
+   </div>
+   
    <div class="barchart" id="barchart"></div>
    
 
    <script>
+
+let startNmb=1;
+let repeateNmb=0;
+let changeYear=0;
 
 
 const top_n = 11;
@@ -108,8 +118,8 @@ function resize(){
 
  //1280
 
-const tickDuration  = 1200; //delay of an animation 1000
-const delayDuration = 1200; //delay between two years 1500
+const tickDuration  = 800; //delay of an animation 1000
+const delayDuration = 1000; //delay between two years 1500
 
 const yearStart     = 2001;
 const yearEnd       = 2020;
@@ -270,11 +280,17 @@ d3.csv("data/goalscores.csv")
 
    let ticker = d3.interval(e => {
 
+
+      
       yearSlice = _normalizeData();
 
       yearSlice.forEach((d,i) => d.rank = i);
 
-      
+      /*DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDdddddddddddddddddDD*/
+
+
+
+
 
       x.domain([0, d3.max(yearSlice, d => d.value)]); 
 
@@ -394,12 +410,58 @@ d3.csv("data/goalscores.csv")
 
       yearText.html(~~year);
 
-      year ++;
-      if(year > yearEnd) ticker.stop();
+      
+      if(repeateNmb==1){
+         year=2000;
+         repeateNmb=0;
+         startNmb=1;
+      }
+
+
+
+     if(startNmb==1 && year<yearEnd){
+         year++;
+         document.getElementById("start").style.backgroundColor = "green";
+      }
+
+      if(changeYear==1)
+      {
+         year=document.getElementById("yearGo").value;
+         changeYear=0;
+        // startNmb=1;
+         
+      }
+   
+      //year ++;
+
+      //if(year > yearEnd) ticker.stop();
    }, delayDuration);
 
 });
 
+function repeate() {
+   console.log("repeate");
+   repeateNmb=1;
+}
+
+function startStop() {
+   console.log("start");
+   if(startNmb==1)
+   {document.getElementById("start").style.backgroundColor = "red";
+   startNmb =0;
+   }
+   else {
+      document.getElementById("start").style.backgroundColor = "green";
+      startNmb=1;
+   }
+}
+
+function goTo(){
+   let inputVal = document.getElementById("yearGo").value;
+   console.log(inputVal);
+   changeYear=1;
+
+}
 
 
 //PIE CHART---------------------------------

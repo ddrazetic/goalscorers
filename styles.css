@@ -96,6 +96,24 @@ border-color: white;
     max-width: 360px;
 }
 
+.repeat img {
+  
+  width: 23px;
+  height: 23px;
+}
+.repeat  {
+  background-color:gray;
+}
+
+.start img {
+  
+  width: 23px;
+  height: 23px;
+}
+.start  {
+  background-color: green;
+}
+
 /* PIE CHART --------------------------*/
 
 
