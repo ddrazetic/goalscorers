@@ -81,15 +81,18 @@
       
       
    </div>
-   <div class="buttons">
+
+   <div class="display">
+   
+      <div class="barchart" id="barchart"></div>
+
+      <div class="buttons">
          <button class="repeat" id="repeate" onclick="repeate()"><img src="images/redo.png"></button>
          <button class="start" id="start" onclick="startStop()"><img src="images/play.png"></button>
-         <input type="number" min="2001" max="2020" id="yearGo" name="yearGo">
+         <input type="number" class="yearGo" min="2001" max="2020" id="yearGo" name="yearGo">
          <button class="repeat" id="goTo" onclick="goTo()"><img src="images/arrow.png"></button>
    </div>
-   
-   <div class="barchart" id="barchart"></div>
-   
+   </div>
 
    <script>
 
@@ -634,6 +637,7 @@ formattedData.forEach(function(pieData, i) {
       .append('path')
      
       .attr('d', arc1)
+      
       .style("fill-opacity", 0)
       .attr('fill', (d,i) => color(i))
       
