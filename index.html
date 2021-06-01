@@ -14,6 +14,7 @@
       <div class="boots"><img src="images/boots.png"></div>
       <div class="heading"><h1>Top 8 football goalscorers in Europe still playing</h1></div> 
       <div class="ball"><img src="images/ball1.png"></div>
+      
    </header>
 
   
@@ -86,7 +87,7 @@
 
             <div class="slidecontainer">
                <input oninput="rangeFunction()" type="range" min="2000" max="2020" value="2001" list="ticks1" step="1" class="slider" id="myRange">
-               <datalist id="ticks1">
+               <datalist class="ticks1" id="ticks1">
                   <option value="2000">'00</option>
                   <option value="2001">'01</option>
                   <option value="2002">'02</option>
@@ -138,7 +139,7 @@ const delayDuration = 1200; //delay between two years 1500
 const yearStart     = 2001;
 const yearEnd       = 2020;
 
-const title = `Goals for club in all competitions (${yearStart}-${yearEnd})`;
+const title = `League goals (${yearStart}-${yearEnd})`;
 const subTitle = "(until May 11, 2021)";
 
 const svg = d3.select("#barchart").append("svg")
