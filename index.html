@@ -5,11 +5,7 @@
    <link rel="stylesheet" href="styles.css">
    <script src="https://d3js.org/d3.v5.min.js"></script>
    
-   
-   
    <style>
-
-  
    </style>
 </head>
 
@@ -24,69 +20,68 @@
 
    <div class="players">
 
-<div class="players2">
-      <div class="player1">
-         <img src="images/player1.jpg">
-         <p>1. CRISTIANO RONALDO</p>
-         <div class="chart" id="chart0"></div>
+      <div class="players2">
+            <div class="player1">
+               <img src="images/player1.jpg">
+               <p>1. CRISTIANO RONALDO</p>
+               <div class="chart" id="chart0"></div>
+            </div>
+            <div class="player1">
+               <img src="images/player2.jpg">
+               <p>2. LIONEL MESSI</p>
+               <div class="chart" id="chart1"></div> 
+            </div>
       </div>
-      <div class="player1">
-         <img src="images/player2.jpg">
-         <p>2. LIONEL MESSI</p>
-         <div class="chart" id="chart1"></div> 
-      </div>
-   </div>
-<div class="players2">
-      <div class="player1">
-         <img src="images/player3.jpg">
-         <p>3. ZLATAN IBRAHIMOVIĆ</p>
-         <div class="chart" id="chart2"></div>
-      </div>
-      <div class="player1">
-         <img src="images/player4.jpg">
-         <p>4. LUIS SUAREZ</p>
-         <div class="chart" id="chart3"></div>
-      </div>
-   </div>  
+
+      <div class="players2">
+            <div class="player1">
+               <img src="images/player3.jpg">
+               <p>3. ZLATAN IBRAHIMOVIĆ</p>
+               <div class="chart" id="chart2"></div>
+            </div>
+            <div class="player1">
+               <img src="images/player4.jpg">
+               <p>4. LUIS SUAREZ</p>
+               <div class="chart" id="chart3"></div>
+            </div>
+      </div>  
    </div>
 
    <div class="players">
+
       <div class="players2">
-                  <div class="player1">
-                     <img src="images/player5.jpg">
-                     <p>5. ROBERT LEWANDOWSKI</p>
-                     <div class="chart" id="chart4"></div>
-                  </div>
-                  <div class="player1">
-                     <img src="images/player6.jpg">
-                     <p>6. EDISON CAVANI</p>
-                     <div class="chart" id="chart5"></div>
-                  </div>
-               </div>
+            <div class="player1">
+               <img src="images/player5.jpg">
+               <p>5. ROBERT LEWANDOWSKI</p>
+               <div class="chart" id="chart4"></div>
+            </div>
+            <div class="player1">
+               <img src="images/player6.jpg">
+               <p>6. EDISON CAVANI</p>
+               <div class="chart" id="chart5"></div>
+            </div>
+      </div>
 
 
-               <div class="players2">
-                  <div class="player1">
-                     <img src="images/player7.jpg">
-                     <p>7. SERGIO AGUERO</p>
-                     <div class="chart" id="chart6"></div>
-                  </div>
-                  <div class="player1">
-                     <img src="images/player8.jpg">
-                     <p>8. KLASS-JAN HUNTELAAR</p>
-                     <div class="chart" id="chart7"></div>
-                  </div>
-               </div>
-
-      
-      
+      <div class="players2">
+         <div class="player1">
+            <img src="images/player7.jpg">
+            <p>7. SERGIO AGUERO</p>
+            <div class="chart" id="chart6"></div>
+         </div>
+         <div class="player1">
+            <img src="images/player8.jpg">
+            <p>8. KLASS-JAN HUNTELAAR</p>
+            <div class="chart" id="chart7"></div>
+         </div>
+      </div>
    </div>
   
    
   
    <div class="display">
       <div class="barSlider">
-   
+
             <div class="barchart" id="barchart"></div>
 
             <div class="slidecontainer">
@@ -116,7 +111,7 @@
                 </datalist>
                <label id="result"></label> 
             </div>
-         </div>      
+      </div>      
 
       <div class="buttons">
          <button class="repeat" id="repeate" onclick="repeate()"><img src="images/redo.png"></button>
@@ -125,12 +120,6 @@
          <button class="repeat" id="goTo" onclick="goTo()"><img src="images/arrow.png"></button>
       </div>
    </div>
-<!-- Write your comments here 
-   <div class="slidecontainer">
-      <input oninput="rangeFunction()" type="range" min="2001" max="2020" value="2001" step="1" class="slider" id="myRange">
-      <label id="result"></label> 
-   </div>
--->
 
    <script>
 
@@ -139,26 +128,9 @@ let repeateNmb=0;
 let changeYear=0;
 let rangeNmb=0;
 
-
 const top_n = 11;
 const height = 720;
-//const width = 1280;
 const width = window.innerWidth - 300;
-
-/*
-function resize(){
-    // do all your stuff here
-    width = window.innerWidth - 600;
-    
-    const svg = d3.select("body").append("svg")
-   .attr("width", width)
-   .attr("height", height);
-
-}
-
-*/
-
- //1280
 
 const tickDuration  = 1000; //delay of an animation 1000
 const delayDuration = 1200; //delay between two years 1500
@@ -169,14 +141,9 @@ const yearEnd       = 2020;
 const title = `Goals for club in all competitions (${yearStart}-${yearEnd})`;
 const subTitle = "(until May 11, 2021)";
 
-    
 const svg = d3.select("#barchart").append("svg")
    .attr("width", width)
    .attr("height", height);
-
-
-
-   
 
 const margin = {
    top: 120,
@@ -246,7 +213,6 @@ d3.csv("data/goalscores.csv")
               lastValue: lastValue
           });
           
-          //remember current value of the country
           values[name] = val;
        });
        
@@ -322,18 +288,11 @@ d3.csv("data/goalscores.csv")
 
    let ticker = d3.interval(e => {
 
-
-      
       yearSlice = _normalizeData();
 
       yearSlice.forEach((d,i) => d.rank = i);
 
-      /*DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDdddddddddddddddddDD*/
-
-
-
-
-
+      
       x.domain([0, d3.max(yearSlice, d => d.value)]); 
 
       svg.select('.xAxis')
@@ -407,8 +366,6 @@ d3.csv("data/goalscores.csv")
          .attr('y', d => y(top_n+1)+5)
          .remove();
 
-
-
       const valueLabels = svg.selectAll('.valueLabel').data(yearSlice, d => d.name);
 
       valueLabels
@@ -431,7 +388,6 @@ d3.csv("data/goalscores.csv")
          .attr('y', d => y(d.rank)+5+((y(1)-y(0))/2)+1)
          .tween("text", function(d) {
             const i = d3.interpolateNumber(d.lastValue, d.value);
-            //return i(interpolator);
             return function(t) {
                let v = i(t);
                if( v < 0 )
@@ -459,27 +415,15 @@ d3.csv("data/goalscores.csv")
          startNmb=1;
       }
 
-
-
      if(startNmb==1 && year<yearEnd){
          year++;
          document.getElementById("start").style.backgroundColor = "green";
-         
-
       }
-
-      
-
-
-
-
 
       if(changeYear==1)
       {
          year=document.getElementById("yearGo").value;
          changeYear=0;
-        // startNmb=1;
-         
       }
 
       if(rangeNmb==1){
@@ -487,41 +431,31 @@ d3.csv("data/goalscores.csv")
          rangeNmb=0;
       }
 
-
-
-
-
-      
       prev.style.color="gray";
       opSelected = doc.querySelector(`[value="${year}"]`);
       opSelected.style.color ="red";
       prev= opSelected;
 
-
-      
-
       document.getElementById('myRange').value=year;
 
-      //year ++;
-
-      //if(year > yearEnd) ticker.stop();
    }, delayDuration);
 
 });
 
-
 function repeate() {
-   console.log("repeate");
+   console.log("repeat");
    repeateNmb=1;
 }
 
 function startStop() {
    console.log("start");
    if(startNmb==1)
-   {document.getElementById("start").style.backgroundColor = "red";
-   startNmb =0;
+   {  
+      document.getElementById("start").style.backgroundColor = "red";
+      startNmb =0;
    }
-   else {
+   else 
+   {
       document.getElementById("start").style.backgroundColor = "green";
       startNmb=1;
    }
@@ -530,32 +464,21 @@ function startStop() {
 function goTo(){
    let inputVal = document.getElementById("yearGo").value;
    console.log(inputVal);
-   
-
    changeYear=1;
-
 }
 
 var prev=document.getElementById("ticks1").querySelector(`[value="${document.getElementById("myRange").value}"]`);
 var x , opSelected;
 var doc= document.getElementById("ticks1");
 
-
-
 function rangeFunction() {
 
-  prev.style.color="gray";
-   
-    x = document.getElementById("myRange").value;
-    opSelected = doc.querySelector(`[value="${x}"]`);
+   prev.style.color="gray";
+   x = document.getElementById("myRange").value;
+   opSelected = doc.querySelector(`[value="${x}"]`);
    opSelected.style.color ="red";
-
    prev= opSelected;
-
-
    rangeNmb=1;
-  //  var x = document.getElementById("myRange").value; //get current range value
-   // document.getElementById("result").innerHTML = x; // display current range value in #result
 }
 
 //PIE CHART---------------------------------
@@ -589,8 +512,6 @@ var keyMap = [{
 
 
 var dataa = [
-  
-
   
   {name1: "ASSISTS", value1: 147},
   {name1: "GOALS", value1: 477},
@@ -638,23 +559,15 @@ var formattedData = d3.nest()
 .key(function(d) { return Object.keys(d)[0]; })
 .entries(dataa).map(function(d){ return d.values });
 
-
-
-
-
 formattedData.forEach(function(pieData, i) {
 
-
       var color = d3.scaleOrdinal([`#00FFFF`, `#04B3B3`]);
-    
-
+   
       var svg1 = d3.select("#chart"+i)
       .append('svg')
       .attr('class', 'pie')
       .attr('width', width1)
       .attr('height', height1);
-
-
 
       var g1 = svg1.append('g')
       .attr('transform', 'translate(' + (width1/2) + ',' + (height1/2) + ')');
@@ -667,8 +580,6 @@ formattedData.forEach(function(pieData, i) {
       .innerRadius(radius - thickness -79)
       .outerRadius(radius);
       
-
-
       var pie = d3.pie()
       .sort(null)
       .value(function(d) {
@@ -676,16 +587,11 @@ formattedData.forEach(function(pieData, i) {
          return d[keyMap[i].value];
       });
 
-
-
       var path = g1.selectAll('path')
       .data(pie(pieData))
       .enter()
       .append("g")
-      
-
-      
-      
+   
       .on("mouseover", function(d) {
             let g = d3.select(this)
             
@@ -717,22 +623,12 @@ formattedData.forEach(function(pieData, i) {
             .style("fill", color(this._current))
             .select(".text-group").remove();
             
-            
-            /*d3.select(this)
-            .append("text")
-            .text("HELLO");
-*/
-
-              
          })
       .append('path')
-     
       .attr('d', arc1)
-      
       .style("fill-opacity", 0)
       .attr('fill', (d,i) => color(i))
       
-
       .on("mouseover", function(d) {
             d3.select(this)     
             .style("cursor", "pointer")
@@ -763,17 +659,7 @@ formattedData.forEach(function(pieData, i) {
 
 });
 
-
-
-
-/*
-$(document).ready(function(){
-    resize();
-    $(window).resize(resize);
-});
-*/
    </script>
-
 
 </body>
 
